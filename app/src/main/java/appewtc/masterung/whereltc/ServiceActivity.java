@@ -147,14 +147,9 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             myAlert.myDialog();
             //non chose
         } else {
-
             //data ok
         }
-        
-
     } //clickSave
-
-
     @Override
     protected void onResume() {
         super.onResume();
