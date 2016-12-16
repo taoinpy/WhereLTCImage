@@ -2,6 +2,8 @@ package appewtc.masterung.whereltc;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntRange;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     }   // Main Method
+
+    public void clickPass(View view) {
+        String[] strings = new String[]{"1","Name","User","Password"};
+        Intent intent = new Intent(MainActivity.this, ServiceActivity.class);
+        intent.putExtra("Login", strings);
+        startActivity(intent);
+    }
 
     public void clickSignIn(View view) {
 

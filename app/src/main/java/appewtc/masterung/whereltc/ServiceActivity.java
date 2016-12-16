@@ -34,14 +34,10 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private ImageView imageView, takePhotoImageView;
     private String nameImageString;
 
-
-
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
