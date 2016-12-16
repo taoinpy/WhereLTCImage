@@ -1,10 +1,15 @@
 package appewtc.masterung.whereltc;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +26,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.net.URI;
+
 public class ServiceActivity extends FragmentActivity implements OnMapReadyCallback {
 
     //Explicit
@@ -33,6 +40,10 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private EditText editText;
     private ImageView imageView, takePhotoImageView;
     private String nameImageString;
+    private Uri uri;
+
+    private boolean aBoolean = true;
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -47,6 +58,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         editText = (EditText) findViewById(R.id.editText6);
         imageView = (ImageView) findViewById(R.id.imageView2);
         takePhotoImageView = (ImageView) findViewById(R.id.imageView4);
+
 
 
         //Setup
@@ -64,8 +76,57 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //Take Photo
+
+        takePhotoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Please Choose App"),1);
+            }
+        });
 
     }   // Main Method
+
+    //Image Controller
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+
+            uri = data.getData();
+            changeImage(uri);
+            aBoolean = false;
+
+        } // if
+
+    }// onActivity Result
+
+
+    private void changeImage(Uri uri) {
+
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            //imageView.setImageBitmap(Bitmap);
+            imageView.setImageBitmap(bitmap);
+
+        } catch (Exception e) {
+
+
+        }
+    }
 
     public void clickSave(View view) {
 
@@ -78,8 +139,18 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     getResources().getString(R.string.message_have_space),
                     R.drawable.doremon48);
 
+        } else if (aBoolean) {
+            MyAlert myAlert = new MyAlert(ServiceActivity.this,
+                    getResources().getString(R.string.title_noImage),
+                    getResources().getString(R.string.message_noImage),
+                    R.drawable.nobita48);
+            myAlert.myDialog();
+            //non chose
+        } else {
 
+            //data ok
         }
+        
 
     } //clickSave
 
